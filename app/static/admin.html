@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Panitia</title>
+<link rel="stylesheet" href="/static/css/style.css?v=4">
+</head>
+<body>
+
+<!-- NOTIFIKASI POPUP ANIMASI (OTOMATIS HILANG 2 DETIK) -->
+<div id="toast-popup" class="toast-popup"></div>
+
+<!-- MODAL EDIT VOUCHER PEMILIH -->
+<div id="modal-edit-voucher" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-bottom:12px">Edit Nama Pemilih</h3>
+    <input type="hidden" id="edit-v-id">
+    <div class="form-group" style="margin-bottom:14px">
+      <label for="edit-v-nama">Nama Pemilih</label>
+      <input id="edit-v-nama" placeholder="Masukkan nama pemilih baru" required>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px">
+      <button id="btn-batal-edit" type="button">Batal</button>
+      <button id="btn-simpan-edit" class="btn-primary" type="button">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT KANDIDAT -->
+<div id="modal-edit-kandidat" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-bottom:16px">Edit Kandidat</h3>
+    <input type="hidden" id="edit-k-id">
+    <input type="hidden" id="edit-k-aktif">
+    <div class="form-group" style="margin-bottom:14px">
+      <label for="edit-k-nama">Nama Kandidat</label>
+      <input id="edit-k-nama" placeholder="Nama lengkap kandidat" required>
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label for="edit-k-asal">Asal Pimpinan</label>
+      <select id="edit-k-asal">
+        <option value=""> -Pilih Asal Pimpinan- </option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:18px">
+      <label for="edit-k-foto">Foto Kandidat <span class="muted" style="font-weight:400">(kosongkan jika tidak diganti)</span></label>
+      <div style="display:flex; align-items:center; gap:12px; margin-top:4px">
+        <img id="edit-k-foto-preview" src="" alt="Foto" style="width:56px; height:56px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0; display:none">
+        <input id="edit-k-foto" type="file" accept="image/*">
+      </div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px">
+      <button id="btn-batal-edit-kandidat" type="button">Batal</button>
+      <button id="btn-simpan-edit-kandidat" class="btn-primary" type="button">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<div id="login-wrap" class="page-login">
+  <div class="card login-card">
+    <img src="/static/assets/dashboard.png?v=2" alt="Logo" class="logo">
+    <h1>Login Panitia</h1>
+    <form id="form-admin-login" autocomplete="off">
+      <input id="a-username" placeholder="Username" required>
+      <input id="a-password" type="password" placeholder="Password" required>
+      <button type="submit" class="btn-primary" style="margin-top:14px; width:100%">Masuk</button>
+    </form>
+  </div>
+</div>
+
+<div id="app-wrap" style="display:none">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <img src="/static/assets/dashboard.png?v=2" alt="Logo" class="logo-xs">
+      <span>Dashboard - PANLIHDA PD Kab.Kediri</span>
+    </div>
+    <nav>
+      <button class="tab-btn active" data-tab="hasil">Hasil</button>
+      <button class="tab-btn" data-tab="voucher">Voucher</button>
+      <button class="tab-btn" data-tab="kandidat">Kandidat</button>
+      <button class="tab-btn" data-tab="wilayah">Wilayah</button>
+      <button class="tab-btn" data-tab="log">Log</button>
+      <button class="tab-btn" data-tab="akun">Akun</button>
+      <button id="btn-keluar">Keluar</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- TAB HASIL -->
+    <section id="tab-hasil" class="tab active">
+      <div class="section-header">
+        <h2>Hasil Voting Peserta</h2>
+        <span class="muted" id="hasil-refresh"></span>
+      </div>
+      <div id="stat" class="stat-row"></div>
+      <div class="card">
+        <h3>Perolehan Suara</h3>
+        <div id="grafik" style="margin-top:14px"></div>
+      </div>
+      <p><a id="btn-export" class="btn-primary" href="/admin/api/export">Unduh Rekap Excel</a></p>
+    </section>
+
+    <!-- TAB VOUCHER -->
+    <section id="tab-voucher" class="tab">
+      <h2>Manajemen Voucher Pemilih</h2>
+      <div class="card">
+        <h3>Tambah Voucher Pemilih</h3>
+        <div class="form-row">
+          <div class="form-group" style="flex:1; min-width:200px">
+            <label for="v-wilayah">Wilayah / Cabang</label>
+            <select id="v-wilayah"></select>
+          </div>
+          <div class="form-group" style="flex:2; min-width:240px">
+            <label for="v-nama">Nama Pemilih</label>
+            <input id="v-nama" placeholder="Nama" required>
+          </div>
+          <button id="btn-tambah-voucher" class="btn-primary">Tambah Voucher</button>
+        </div>
+        <p class="muted" style="margin-top:8px">Asal pimpinan otomatis mengikuti nama wilayah yang dipilih.</p>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding:10px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; flex-wrap:wrap; gap:10px">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
+            <label for="global-kuota" style="font-weight:600; font-size:13px; color:#334155">Kuota Suara:</label>
+            <input id="global-kuota" type="number" min="1" value="1" style="width:70px; padding:4px 8px">
+            <button id="btn-set-kuota" class="btn-sm" type="button">Terapkan ke Semua Voucher</button>
+          </div>
+          <span class="muted" style="font-size:12px">Kuota berlaku seragam untuk seluruh voucher pemilih.</span>
+        </div>
+
+        <div class="section-header">
+          <div style="display:flex; align-items:center; gap:10px">
+            <h3>Daftar Voucher</h3>
+            <select id="filter-wilayah" style="font-size:12.5px; padding:4px 8px"></select>
+          </div>
+          <button id="btn-cetak-terfilter" class="btn-primary btn-sm">Cetak Daftar Ini</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="tbl" id="tbl-voucher">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Nama Pemilih</th>
+                <th>Asal Pimpinan</th>
+                <th>Wilayah</th>
+                <th>Status</th>
+                <th style="width:200px">Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB KANDIDAT -->
+    <section id="tab-kandidat" class="tab">
+      <h2>Manajemen Kandidat</h2>
+      <div class="card">
+        <h3>Tambah Kandidat Baru</h3>
+        <div class="form-row">
+          <div class="form-group" style="flex:2; min-width:200px">
+            <label for="k-nama">Nama Lengkap Kandidat</label>
+            <input id="k-nama" placeholder="Nama kandidat" required>
+          </div>
+          <div class="form-group" style="flex:1.5; min-width:180px">
+            <label for="k-asal">Asal Pimpinan</label>
+            <select id="k-asal">
+              <option value=""> -Pilih Asal Pimpinan- </option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1.5; min-width:180px">
+            <label for="k-foto">Foto Kandidat</label>
+            <input id="k-foto" type="file" accept="image/*">
+          </div>
+          <button id="btn-tambah-kandidat" class="btn-primary">Tambah Kandidat</button>
+        </div>
+        <p class="muted" style="margin-top:8px">Nomor urut kandidat akan diatur secara otomatis sesuai urutan pendaftaran.</p>
+      </div>
+
+      <div class="card">
+        <h3>Daftar Kandidat</h3>
+        <div class="table-wrap">
+          <table class="tbl" id="tbl-kandidat">
+            <thead>
+              <tr>
+                <th style="width:70px">No. Urut</th>
+                <th style="width:70px">Foto</th>
+                <th>Nama Kandidat</th>
+                <th>Asal Pimpinan</th>
+                <th style="width:100px">Status</th>
+                <th style="width:200px">Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB WILAYAH -->
+    <section id="tab-wilayah" class="tab">
+      <h2>Manajemen Wilayah</h2>
+      <div class="card">
+        <h3>Tambah Wilayah Baru</h3>
+        <div class="form-row">
+          <div class="form-group" style="width:140px">
+            <label for="w-kode">Kode Pos (5 digit)</label>
+            <input id="w-kode" placeholder="Kode Pos" maxlength="5">
+          </div>
+          <div class="form-group" style="flex:2; min-width:220px">
+            <label for="w-nama">Nama Cabang / Wilayah</label>
+            <input id="w-nama" placeholder="Cabang / Wilayah">
+          </div>
+          <button id="btn-tambah-wilayah" class="btn-primary">Tambah Wilayah</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Daftar Wilayah Terdaftar</h3>
+        <div class="table-wrap">
+          <table class="tbl" id="tbl-wilayah">
+            <thead>
+              <tr>
+                <th>Kode Pos</th>
+                <th>Nama Wilayah</th>
+                <th>Total Voucher</th>
+                <th>Sudah Voting</th>
+                <th style="width:100px">Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB LOG -->
+    <section id="tab-log" class="tab">
+      <h2>Log Aktivitas Sistem</h2>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="tbl" id="tbl-log">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Aktivitas</th>
+                <th>Voucher</th>
+                <th>Admin</th>
+                <th>Keterangan</th>
+                <th>IP Client</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB AKUN -->
+    <section id="tab-akun" class="tab">
+      <h2>Pengaturan Akun Panitia</h2>
+      <div class="card" style="max-width:460px">
+        <h3>Ganti Password</h3>
+        <div class="form-group" style="margin-top:12px">
+          <label for="p-lama">Password Lama</label>
+          <input id="p-lama" type="password" placeholder="Masukkan password saat ini">
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label for="p-baru">Password Baru</label>
+          <input id="p-baru" type="password" placeholder="Minimal 8 karakter">
+        </div>
+        <button id="btn-ganti-pass" class="btn-primary" style="margin-top:16px">Simpan Password Baru</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/static/js/admin.js?v=7"></script>
+</body>
+</html>

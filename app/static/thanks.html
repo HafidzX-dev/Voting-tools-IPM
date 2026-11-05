@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terima Kasih</title>
+<link rel="stylesheet" href="/static/css/style.css?v=2">
+</head>
+<body class="page-login">
+<div class="card login-card">
+  <img src="/static/assets/logo.png?v=2" alt="Logo" class="logo">
+  <h1>Terima Kasih</h1>
+  <p class="muted">Telah berpartisipasi dalam pemilihan ini.</p>
+  <p class="countdown">Halaman login dibuka kembali dalam <b id="angka">5</b> detik.</p>
+</div>
+<script>
+var n = 5;
+setInterval(function () {
+  n--;
+  if (n <= 0) { location.href = '/'; return; }
+  document.getElementById('angka').textContent = n;
+}, 1000);
+</script>
+</body>
+</html>

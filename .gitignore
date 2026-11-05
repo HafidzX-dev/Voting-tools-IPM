@@ -1,0 +1,19 @@
+# Pengecualian Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Pengecualian Konfigurasi & Rahasia
+.env
+.vscode/
+.idea/
+
+# Pengecualian File Sampah Sistem
+Thumbs.db
+.DS_Store
+
+# Pengecualian Data Hasil Test
+app/static/*.xlsx
+*.log

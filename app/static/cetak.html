@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Cetak Voucher</title>
+<link rel="stylesheet" href="/static/css/style.css?v=2">
+<style>
+@media print {
+  .no-print { display: none !important; }
+  .voucher { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="no-print" style="padding: 14px 16px; background:#ffffff; border-bottom:1px solid #e2e8f0; display:flex; gap:10px; align-items:center">
+  <button class="btn-primary" onclick="window.print()">Cetak Halaman Ini</button>
+  <button onclick="window.close()">Tutup</button>
+</div>
+
+<div id="daftar-voucher" class="voucher-grid"></div>
+
+<script>
+var raw = sessionStorage.getItem('cetak_voucher') || localStorage.getItem('cetak_voucher') || '[]';
+var data = [];
+try {
+  data = JSON.parse(raw);
+} catch (e) {
+  data = [];
+}
+var logo = '/static/assets/logo.png?v=2';
+var wrap = document.getElementById('daftar-voucher');
+
+function renderVoucher() {
+  wrap.innerHTML = '';
+  if (!data || !data.length) {
+    wrap.innerHTML = '<p style="padding:20px; color:#64748b">Tidak ada data voucher untuk dicetak.</p>';
+    return;
+  }
+  data.forEach(function (v) {
+    var el = document.createElement('div');
+    el.className = 'voucher';
+    el.innerHTML =
+      '<img src="' + logo + '" class="logo logo-sm" style="margin-bottom:6px" alt="Logo">' +
+      '<div class="v-nama">' + (v.nama || '&nbsp;') + '</div>' +
+      '<div class="v-asal">' + (v.asal_pimpinan || '&nbsp;') + '</div>' +
+      '<hr>' +
+      '<table>' +
+      '<tr><td>Username</td><td>:</td><td><b style="font-family:monospace; font-size:14px">' + v.username + '</b></td></tr>' +
+      '<tr><td>Password</td><td>:</td><td><b style="font-family:monospace; font-size:14px; letter-spacing:1px; color:#0f172a">' + (v.password || '-') + '</b></td></tr>' +
+      '</table>';
+    wrap.appendChild(el);
+  });
+}
+
+// Cek apakah ada password yang kosong/hilang
+var perluFetch = !data.length || data.some(function (v) { return !v.password; });
+
+if (perluFetch) {
+  fetch('/admin/api/voucher').then(function (r) {
+    return r.json();
+  }).then(function (res) {
+    if (res.ok && res.items) {
+      var map = {};
+      res.items.forEach(function (item) {
+        map[item.username] = item;
+      });
+      if (data.length > 0) {
+        data.forEach(function (v) {
+          if ((!v.password || v.password === '-') && map[v.username]) {
+            v.password = map[v.username].password;
+          }
+        });
+      } else {
+        data = res.items;
+      }
+    }
+    renderVoucher();
+  }).catch(function () {
+    renderVoucher();
+  });
+} else {
+  renderVoucher();
+}
+</script>
+</body>
+</html>
