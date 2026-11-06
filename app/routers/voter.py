@@ -86,7 +86,7 @@ def daftar_kandidat(request: Request, db: Session = Depends(get_db)):
     return {
         'ok': True,
         'kuota': voucher.kuota,
-        'kandidat': [{'id': k.id, 'nama': k.nama, 'asal_pimpinan': k.asal_pimpinan or '', 'foto': k.foto} for k in rows],
+        'kandidat': [{'id': k.id, 'nama': k.nama, 'asal_pimpinan': k.asal_pimpinan or '', 'foto': k.foto, 'urutan': k.urutan} for k in rows],
     }
 
 

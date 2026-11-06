@@ -460,6 +460,25 @@ button.btn-sm {
   box-shadow: 0 0 0 1px #69b6ed;
 }
 
+.kandidat-nomor {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  color: #1e293b;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
 .kandidat-check {
   position: absolute;
   top: 8px;
@@ -490,7 +509,7 @@ button.btn-sm {
 
 .kandidat img {
   width: 100%;
-  height: 130px;
+  height: 160px;
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 10px;

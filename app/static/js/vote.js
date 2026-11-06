@@ -41,6 +41,10 @@ fetch('/api/kandidat').then(function (r) { return r.json(); }).then(function (d)
     el.setAttribute('aria-checked', 'false');
     el.setAttribute('tabindex', '0');
 
+    var nomorEl = document.createElement('div');
+    nomorEl.className = 'kandidat-nomor';
+    nomorEl.textContent = k.urutan != null ? k.urutan : '';
+
     var checkEl = document.createElement('div');
     checkEl.className = 'kandidat-check';
     checkEl.setAttribute('aria-hidden', 'true');
@@ -58,9 +62,19 @@ fetch('/api/kandidat').then(function (r) { return r.json(); }).then(function (d)
     namaEl.className = 'nama';
     namaEl.textContent = k.nama;
 
+    el.appendChild(nomorEl);
     el.appendChild(checkEl);
     el.appendChild(imgEl);
     el.appendChild(namaEl);
+
+    if (k.asal_pimpinan) {
+      var asalEl = document.createElement('div');
+      asalEl.className = 'muted';
+      asalEl.style.fontSize = '12px';
+      asalEl.style.marginTop = '2px';
+      asalEl.textContent = k.asal_pimpinan;
+      el.appendChild(asalEl);
+    }
 
     el.onclick = function () {
       var idx = dipilih.indexOf(k.id);

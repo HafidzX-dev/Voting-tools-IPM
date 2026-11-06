@@ -316,11 +316,10 @@ def tambah_voucher(data: TambahVoucherIn, request: Request, db: Session = Depend
     v_last_kuota = db.query(Voucher.kuota).order_by(Voucher.id.desc()).first()
     kuota_aktif = v_last_kuota[0] if v_last_kuota else 1
 
-    last = (db.query(Voucher).filter_by(wilayah_id=w.id)
-            .order_by(Voucher.nomor_urut.desc()).first())
-    start = (last.nomor_urut + 1) if last else 1
-    if start > 999:
-        return {'ok': False, 'msg': 'Nomor urut wilayah ini sudah penuh (maks 999).'}
+    max_urut = db.query(func.max(Voucher.nomor_urut)).scalar() or 0
+    start = max_urut + 1
+    if start > 99999:
+        return {'ok': False, 'msg': 'Nomor urut voucher sudah penuh (maks 99999).'}
 
     pw = random_password()
     username = '%s%03d' % (w.kode_pos, start)
