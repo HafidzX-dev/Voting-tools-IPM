@@ -491,8 +491,8 @@ button.btn-reset-red:hover {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 13px 16px;
+  grid-template-columns: repeat(auto-fill, 130px);
+  gap: 12px 10px;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -566,6 +566,7 @@ button.btn-reset-red:hover {
 
 .kandidat img {
   display: block;
+  padding-top: 3px;
   width: 100%;
   height: 150px;
   object-fit: cover;
