@@ -16,7 +16,7 @@ body {
 .container {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 16px 16px;
 }
 
 /* ========== TIPOGRAFI & UTILITAS ========== */
@@ -161,6 +161,30 @@ button.btn-sm {
   border-radius: 4px;
 }
 
+button.btn-reset-blue {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+button.btn-reset-blue:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+button.btn-reset-red {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+button.btn-reset-red:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #ffffff;
+}
+
 /* ========== TABEL ========== */
 .table-wrap {
   width: 100%;
@@ -226,6 +250,11 @@ button.btn-sm {
 .badge-new {
   background: #f1f5f9;
   color: #475569;
+}
+
+.badge-warn {
+  background: #fef3c7;
+  color: #b45309;
 }
 
 /* ========== TOPBAR ADMIN ========== */
@@ -401,8 +430,8 @@ button.btn-sm {
 }
 
 .logo-sm {
-  max-width: 48px;
-  max-height: 48px;
+  max-width: 78px;
+  max-height: 78px;
 }
 
 .logo-xs {
@@ -429,14 +458,39 @@ button.btn-sm {
 .vote-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
+  margin-right: -200px;
+}
+
+.vote-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: 30px;
+}
+
+.voter-info {
+  text-align: right;
+  line-height: 1.35;
+}
+
+.voter-info .voter-nama {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.voter-info .voter-asal {
+  font-size: 12.5px;
+  color: #64748b;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 13px 16px;
 }
 
 .kandidat {
@@ -444,7 +498,8 @@ button.btn-sm {
   background: #ffffff;
   border: 2px solid #e2e8f0;
   border-radius: 4px;
-  padding: 26px;
+  padding: 13px;
+  width: 150px;
   text-align: center;
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
@@ -463,10 +518,10 @@ button.btn-sm {
 .kandidat-nomor {
   position: absolute;
   top: 2px;
-  left: 2px;
-  min-width: 28px;
-  height: 28px;
-  padding: 0 6px;
+  min-width: px;
+  left: -4px; 
+  height: 8px;
+  padding: 6px;
   color: #1e293b;
   font-size: 13.5px;
   font-weight: 700;
@@ -508,16 +563,17 @@ button.btn-sm {
 }
 
 .kandidat img {
+  display: block;
   width: 100%;
-  height: 160px;
+  height: 150px;
   object-fit: cover;
   border-radius: 6px;
-  margin-bottom: 10px;
+  margin: 0 auto 10px;
 }
 
 .kandidat .nama {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* Info teks status pilihan */
@@ -526,26 +582,58 @@ button.btn-sm {
   font-weight: 500;
 }
 
+.container-vote {
+  padding-bottom: 90px;
+}
+
 .vote-footer {
   margin-top: 24px;
 }
 
+/* Floating submit button in vote.html */
+.btn-floating-submit,
 #btn-submit {
-  background: #16a34a;
-  border-color: #16a34a;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #f71313;
+  border: 1.5px solid #f33333;
   color: #ffffff;
+  box-shadow: 0 4px 14px rgba(232, 45, 45, 0.4), 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: none; /* Muncul ketika pilihan sudah sesuai kuota */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  animation: floatUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.btn-floating-submit:hover,
 #btn-submit:hover {
-  background: #15803d;
-  border-color: #15803d;
+  background: #f14444;
+  border-color: #f14444;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 2, 2, 0.5);
 }
 
+.btn-floating-submit:active,
+#btn-submit:active {
+  transform: translateY(0);
+}
+
+.btn-floating-submit:disabled,
 #btn-submit:disabled {
   background: #86efac;
   border-color: #86efac;
   color: #14532d;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* ========== NOTIFIKASI TOAST SEDERHANA ========== */

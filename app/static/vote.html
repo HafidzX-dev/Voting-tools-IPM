@@ -4,22 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pemilihan - Kandidat</title>
-<link rel="stylesheet" href="/static/css/style.css?v=6">
+<link rel="stylesheet" href="/static/css/style.css?v=11">
 </head>
 <body>
-<div class="container">
+<div class="container container-vote">
   <div class="vote-header">
-    <img src="/static/assets/logo.png?v=2" alt="Logo" class="logo logo-sm">
-    <div>
-      <h1>Pilih Kandidat</h1>
+    <div class="vote-header-left">
+      <img src="/static/assets/logo.png?v=2" alt="Logo" class="logo logo-sm">
+      <div>
+        <h1>Pilih Kandidat</h1>
+        <p id="info-kuota" class="muted"></p>
+      </div>
+    </div>
+    <div class="voter-info">
+      <div id="voter-nama" class="voter-nama"></div>
+      <div id="voter-asal" class="voter-asal"></div>
     </div>
   </div>
   <div id="daftar" class="grid"></div>
   <div class="vote-footer">
-    <button id="btn-submit" class="btn-primary" disabled>Submit</button>
+    <button id="btn-submit" class="btn-primary btn-floating-submit">Submit</button>
     <div id="pesan" class="pesan"></div>
   </div>
 </div>
-<script src="/static/js/vote.js?v=6"></script>
+
+<!-- MODAL PERNYATAAN VOTING -->
+<div id="modal-pernyataan" class="modal-overlay">
+  <div class="modal-box" style="max-width: 480px; width: 92vw;">
+    <h3 style="margin-bottom: 12px; font-size: 16px;">Pernyataan</h3>
+    <div style="max-height: 220px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: #334155; line-height: 1.6; margin-bottom: 14px;">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 18px;">
+      <input type="checkbox" id="check-pernyataan" style="margin-top: 3px; cursor: pointer; width: 16px; height: 16px;">
+      <label for="check-pernyataan" style="font-size: 13.5px; color: #1e293b; cursor: pointer; user-select: none;">
+        dolor sit amet
+      </label>
+    </div>
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+      <button type="button" id="btn-batal-modal" class="btn-sm">Batal</button>
+      <button type="button" id="btn-final-submit" class="btn-primary btn-sm" style="display: none; background: #f00d0d; border-color: #ee3131;">Submit</button>
+    </div>
+    <div id="modal-pesan" class="pesan" style="margin-top: 8px;"></div>
+  </div>
+</div>
+
+<script src="/static/js/vote.js?v=9"></script>
 </body>
 </html>

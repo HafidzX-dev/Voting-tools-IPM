@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import Voucher, Kandidat, VotingSession, Vote, ActivityLog
+from models import Voucher, Kandidat, VotingSession, Vote, ActivityLog, Wilayah
 from security import check_password, throttle
 
 router = APIRouter()
@@ -81,11 +81,17 @@ def daftar_kandidat(request: Request, db: Session = Depends(get_db)):
     if not sesi or sesi.submit_at:
         return {'ok': False}
     voucher = db.get(Voucher, sesi.voucher_id)
+    wilayah = db.get(Wilayah, voucher.wilayah_id) if voucher else None
+    asal = (voucher.asal_pimpinan or (wilayah.nama if wilayah else '')) if voucher else ''
     rows = (db.query(Kandidat).filter_by(aktif=1)
             .order_by(Kandidat.urutan, Kandidat.id).all())
     return {
         'ok': True,
         'kuota': voucher.kuota,
+        'pemilih': {
+            'nama': voucher.nama or '',
+            'asal_wilayah': asal,
+        },
         'kandidat': [{'id': k.id, 'nama': k.nama, 'asal_pimpinan': k.asal_pimpinan or '', 'foto': k.foto, 'urutan': k.urutan} for k in rows],
     }
 

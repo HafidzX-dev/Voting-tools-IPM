@@ -303,6 +303,22 @@ function muatVoucher(wilayahId) {
 
     items.forEach(function (v) {
       var sudah = v.status === 'TERPAKAI';
+      var statusBadgeHtml = '';
+      if (sudah) {
+        statusBadgeHtml = '<span class="badge badge-ok">Sudah Voting</span>';
+      } else if (v.is_login) {
+        statusBadgeHtml = '<span class="badge badge-warn">Sedang Login</span>';
+      } else {
+        statusBadgeHtml = '<span class="badge badge-new">Belum Voting</span>';
+      }
+
+      var resetBtnHtml = '';
+      if (sudah) {
+        resetBtnHtml = '<button class="btn-sm btn-reset-red" data-action="reset-recover" data-id="' + v.id + '" data-nama="' + esc(v.nama) + '">Reset</button> ';
+      } else {
+        resetBtnHtml = '<button class="btn-sm btn-reset-blue" data-action="reset-login" data-id="' + v.id + '" data-nama="' + esc(v.nama) + '">Reset</button> ';
+      }
+
       var tr = document.createElement('tr');
       tr.innerHTML =
         '<td><strong>' + esc(v.username) + '</strong></td>' +
@@ -312,12 +328,11 @@ function muatVoucher(wilayahId) {
         '</td>' +
         '<td>' + esc(v.asal_pimpinan || v.wilayah_nama) + '</td>' +
         '<td><span class="muted">' + esc(v.wilayah_nama) + '</span></td>' +
-        '<td><span class="badge ' + (sudah ? 'badge-ok' : 'badge-new') + '">' +
-          (sudah ? 'Sudah Voting' : 'Belum Voting') + '</span></td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
         '<td style="white-space:nowrap">' +
           '<button class="btn-sm" data-action="cetak" data-id="' + v.id + '">Cetak</button> ' +
           '<button class="btn-sm" data-action="regen" data-id="' + v.id + '">Password Baru</button> ' +
-          (sudah ? '<button class="danger btn-sm" data-action="reset" data-id="' + v.id + '">Reset</button> ' : '') +
+          resetBtnHtml +
           '<button class="danger btn-sm" data-action="hapus-voucher" data-id="' + v.id + '" data-nama="' + esc(v.nama) + '" data-username="' + esc(v.username) + '">Hapus</button>' +
         '</td>';
       tbody.appendChild(tr);
@@ -458,8 +473,8 @@ document.querySelector('#tbl-voucher').addEventListener('click', function (e) {
     }
   }
 
-  if (action === 'reset') {
-    if (confirm('Recovery akan MENGHAPUS semua pilihan suara dari voucher ini dan memungkinkannya voting kembali. Yakin?')) {
+  if (action === 'reset-recover' || action === 'reset') {
+    if (confirm('Voucher ini sudah voting. Reset akan MENGHAPUS semua pilihan suara dari voucher ini dan memungkinkannya voting kembali. Yakin?')) {
       post('/admin/api/voucher/' + id + '/recover', {}).then(function (d) {
         if (d.ok) {
           tampilkanPopup('Voucher berhasil di-reset.', 'success');
@@ -467,6 +482,19 @@ document.querySelector('#tbl-voucher').addEventListener('click', function (e) {
           muatWilayah();
         } else {
           tampilkanPopup(d.msg || 'Gagal reset voucher.', 'error');
+        }
+      });
+    }
+  }
+
+  if (action === 'reset-login') {
+    if (confirm('Reset sesi login voucher ini? Sesi login aktif akan dikembalikan sehingga pemilih dapat login kembali.')) {
+      post('/admin/api/voucher/' + id + '/reset-login', {}).then(function (d) {
+        if (d.ok) {
+          tampilkanPopup('Sesi login voucher berhasil di-reset.', 'success');
+          muatVoucher(getSelectedWilayahFilter());
+        } else {
+          tampilkanPopup(d.msg || 'Gagal reset login voucher.', 'error');
         }
       });
     }

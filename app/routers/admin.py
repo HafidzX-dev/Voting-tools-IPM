@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 import config
 from database import get_db
 from models import Wilayah, Kandidat, Voucher, VotingSession, Vote, Admin, ActivityLog
-from security import hash_password, check_password, random_password
+from security import hash_password, check_password, random_password, throttle
 
 router = APIRouter(prefix='/admin')
 
@@ -365,6 +365,12 @@ def list_voucher(wilayah_id: int | None = None, request: Request = None, db: Ses
         q = q.filter(Voucher.wilayah_id == wilayah_id)
     rows = q.order_by(Voucher.id.desc()).all()
 
+    active_voucher_ids = set(
+        r[0] for r in db.query(VotingSession.voucher_id)
+        .filter(VotingSession.submit_at == None, VotingSession.logout_at == None)
+        .all()
+    )
+
     items = []
     for v, w in rows:
         items.append({
@@ -378,7 +384,8 @@ def list_voucher(wilayah_id: int | None = None, request: Request = None, db: Ses
             'nama': v.nama or '',
             'asal_pimpinan': v.asal_pimpinan or '',
             'kuota': v.kuota,
-            'status': v.status
+            'status': v.status,
+            'is_login': (v.id in active_voucher_ids) and (v.status != 'TERPAKAI')
         })
     return {'ok': True, 'items': items}
 
@@ -468,6 +475,22 @@ def recover_voucher(vid: int, request: Request, db: Session = Depends(get_db)):
     if not v:
         return {'ok': False, 'msg': 'Voucher tidak ditemukan.'}
     reset_voucher(db, v, request, 'RECOVERY_VOUCHER')
+    throttle.reset('v:' + v.username)
+    db.commit()
+    return {'ok': True, 'username': v.username}
+
+
+@router.post('/api/voucher/{vid}/reset-login')
+def reset_login_voucher(vid: int, request: Request, db: Session = Depends(get_db)):
+    admin_auth(request)
+    v = db.get(Voucher, vid)
+    if not v:
+        return {'ok': False, 'msg': 'Voucher tidak ditemukan.'}
+    if v.status == 'TERPAKAI':
+        return {'ok': False, 'msg': 'Voucher sudah digunakan.'}
+    db.query(VotingSession).filter_by(voucher_id=v.id, submit_at=None).delete()
+    throttle.reset('v:' + v.username)
+    tulis_log(db, request, 'RESET_LOGIN_VOUCHER', v.username)
     db.commit()
     return {'ok': True, 'username': v.username}
 
