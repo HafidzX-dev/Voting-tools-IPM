@@ -493,7 +493,7 @@ button.btn-reset-red:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
   gap: 12px 10px;
-  margin: 0;
+  margin: 0  auto;
   padding: 0;
   width: 100%;
 }
