@@ -461,19 +461,19 @@ button.btn-reset-red:hover {
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
-  margin-right: -200px;
 }
 
 .vote-header-left {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-left: 30px;
+  margin-left: -100px;
 }
 
 .voter-info {
   text-align: right;
   line-height: 1.35;
+  margin-right: -90px;
 }
 
 .voter-info .voter-nama {
@@ -491,6 +491,7 @@ button.btn-reset-red:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, 150px);
   gap: 13px 16px;
+  margin-left: -120px
 }
 
 .kandidat {
@@ -517,11 +518,8 @@ button.btn-reset-red:hover {
 
 .kandidat-nomor {
   position: absolute;
-  top: 2px;
-  min-width: px;
-  left: -4px; 
-  height: 8px;
-  padding: 6px;
+  top: 4px;
+  left: 6px;
   color: #1e293b;
   font-size: 13.5px;
   font-weight: 700;
