@@ -58,9 +58,15 @@ h3 {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 6px;
+  margin-bottom: 0px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.card p, .card div, .card span {
+  margin-top: 4px !important;
+  margin-bottom: 0 !important;
+  line-height: 1.2 !important;
+  font-size: 13px !important;
 }
 
 /* ========== FORM & INPUT ========== */
@@ -491,11 +497,13 @@ button.btn-reset-red:hover {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 140px);
   gap: 12px 10px;
-  margin: 0  auto;
+  margin: 0 ;
   padding: 0;
   width: 100%;
+  margin-left: 15px;
+  margin-top: -10px;
 }
 
 .kandidat {
