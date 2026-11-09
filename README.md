@@ -1,8 +1,9 @@
 # 🗳️ Voting Tools IPM
 
-[![GitHub License](https://shields.io)](LICENSE)
+[![GitHub License](https://shields.io)](https://github.com)
 [![GitHub Stars](https://shields.io)](https://github.com)
 [![GitHub Issues](https://shields.io)](https://github.com)
+
 
 **Voting Tools IPM** adalah platform e-voting modern yang dirancang khusus untuk memfasilitasi proses pemilihan umum (pemilu) di lingkungan Ikatan Pelajar Muhammadiyah (IPM) secara cepat, transparan, dan akurat. 
 
