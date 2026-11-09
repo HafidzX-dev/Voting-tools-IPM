@@ -88,9 +88,8 @@ Proyek ini didistribusikan di bawah lisensi MIT. Lihat berkas `LICENSE` untuk in
 ## 📞 Kontak & Pengembang
 
 * **GitHub**: [@HafidzX-dev](https://github.com/HafidzX-dev)
-* **Instragram**: [@hafidzx_iiey]
-(https://www.instagram.com/hafidzx_iiey)
-* **Youtube**: [HafidzX]
+* **Instragram**: [@hafidzx_iiey](https://instagram.com/hafidzx_iiey)
+* **Youtube**: [HafidzX](https://youtube.com/@hafidzx108)
 * **Organisasi**: Ikatan Pelajar Muhammadiyah (IPM)
 
 ---
