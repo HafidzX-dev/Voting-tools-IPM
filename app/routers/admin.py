@@ -60,10 +60,13 @@ def simpan_foto(foto: UploadFile, kandidat_id: int) -> str:
     ext = os.path.splitext(foto.filename)[1].lower()
     if ext not in ('.jpg', '.jpeg', '.png', '.webp'):
         ext = '.jpg'
-    nama_file = 'kandidat_%d%s' % (kandidat_id, ext)
+    token_unik = secrets.token_hex(3) 
+    nama_file = f"kandidat_{kandidat_id}_{token_unik}{ext}"
+    
     with open(UPLOAD_DIR / nama_file, 'wb') as f:
         f.write(foto.file.read())
     return '/static/uploads/' + nama_file
+
 
 
 # ---------- halaman ----------
