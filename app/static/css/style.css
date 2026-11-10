@@ -434,16 +434,7 @@ button.btn-reset-red:hover {
 .link-admin {
   margin-top: 16px;
   font-size: 13px;
-}
-
-.link-admin a {
   color: #64748b;
-  text-decoration: none;
-}
-
-.link-admin a:hover {
-  color: #2563eb;
-  text-decoration: underline;
 }
 
 /* ========== KANDIDAT PEMILIH (VOTE) ========== */
@@ -503,6 +494,7 @@ button.btn-reset-red:hover {
   padding: 0;
   width: 100%;
   margin-top: -10px;
+  margin-left: 15px;
 }
 
 .kandidat {
@@ -578,7 +570,7 @@ button.btn-reset-red:hover {
 
 .kandidat img {
   display: block;
-  padding-top: 3px;
+  padding-top: 0px;
   width: 100%;
   height: 150px;
   object-fit: cover;
@@ -655,7 +647,7 @@ button.btn-reset-red:hover {
   justify-content: left;
   margin-bottom: -35px;
   margin-left: -16px;
-  font-style: #334155;
+  color: #64748b;
 }
 
 .logo-creator {
