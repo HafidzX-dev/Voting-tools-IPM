@@ -651,14 +651,34 @@ button.btn-reset-red:hover {
 }
 
 .logo-creator {
-  margin-bottom: 5px;
+  display: flex;
+  margin-bottom: 0px;
+  position: absolute;  
+}
+.youtube {
+  margin-left: 65px;
+}
+
+.github {
+  margin-left: 40px;
+}
+
+.instagram {
+  margin-left: -1px;
+}
+
+.teks-creator {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  margin-left: 15px;
+  margin-bottom: -10px;
 }
 
 .icon-svg {
   width: 15px;
   height: 15px;
   fill: #64748b;
-  margin-bottom: -5px;
 }
 
 /* ========== NOTIFIKASI TOAST SEDERHANA ========== */
