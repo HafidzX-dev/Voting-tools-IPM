@@ -2,7 +2,7 @@
 
 # 🗳️ VOTING TOOLS IPM
 
-### Digital Voting Platform for Ikatan Pelajar Muhammadiyah
+### 💛Digital Voting Platform for Ikatan Pelajar Muhammadiyah💛
 
 **Mewujudkan proses demokrasi digital yang lebih praktis, transparan, dan terorganisir.**
 
@@ -307,6 +307,5 @@ Dikembangkan untuk mendukung transformasi digital dan kemajuan demokrasi di ling
 
 ⭐ Jika proyek ini bermanfaat, jangan lupa berikan Star pada repository!
 
-[⬆ Kembali ke Atas](#-voting-tools-ipm)
 
 </div>
