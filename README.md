@@ -215,27 +215,6 @@ Sesuaikan alamat tersebut dengan konfigurasi server yang digunakan.
 
 ---
 
-## 🔄 Alur Penggunaan
-
-Berikut gambaran umum proses penggunaan aplikasi:
-
-```mermaid
-flowchart TD
-    A([Mulai]) --> B[Administrator Login]
-    B --> C[Kelola Wilayah]
-    C --> D[Kelola Kandidat]
-    D --> E[Generate Voucher]
-    E --> F[Distribusi Voucher]
-    F --> G[Pemilih Login]
-    G --> H[Pilih Kandidat]
-    H --> I[Suara Tersimpan]
-    I --> J[Pemantauan Hasil]
-    J --> K[Ekspor Rekapitulasi]
-    K --> L([Selesai])
-```
-
----
-
 ## 🔒 Catatan Keamanan
 
 Untuk menjaga integritas penyelenggaraan pemilihan, perhatikan hal-hal berikut:
