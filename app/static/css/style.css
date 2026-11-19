@@ -39,7 +39,7 @@ h3 {
 
 .muted {
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .pesan {
@@ -427,8 +427,9 @@ button.btn-reset-red:hover {
 }
 
 .logo-xs {
-  max-width: 30px;
-  max-height: 30px;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 3px;
 }
 
 .link-admin {
@@ -479,6 +480,16 @@ button.btn-reset-red:hover {
   margin-bottom: 0px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
+
+.indexing {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 26px;
+  margin-bottom: 0px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
 .card p, .card div, .card span {
   margin-top: 4px !important;
   margin-bottom: 0 !important;
@@ -708,8 +719,8 @@ button.btn-reset-red:hover {
 .voucher-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-  padding: 16px;
+  gap: 15px;
+  padding: 18px;
 }
 
 .voucher {
@@ -840,4 +851,17 @@ button.btn-reset-red:hover {
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+.flexing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.logo-3 {
+  height: 60px;
+  width: 40px;
 }
