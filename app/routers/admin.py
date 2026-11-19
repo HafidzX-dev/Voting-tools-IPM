@@ -543,8 +543,6 @@ def log_aktivitas(request: Request, db: Session = Depends(get_db)):
     return out
 
 
-# ---------- export excel ----------
-
 @router.get('/api/export')
 def export_excel(request: Request, db: Session = Depends(get_db)):
     admin_auth(request)
@@ -554,13 +552,19 @@ def export_excel(request: Request, db: Session = Depends(get_db)):
     wb = Workbook()
     ws = wb.active
     ws.title = 'Hasil Voting'
+    
+    # --- 1. TABEL UTAMA & GRAFIK ASLI (TIDAK DIUBAH) ---
     ws.append(['No. Urut', 'Kandidat', 'Suara', 'Persentase (%)'])
     kandidat = (db.query(Kandidat).filter_by(aktif=1)
                 .order_by(Kandidat.urutan, Kandidat.id).all())
     total = db.query(Vote).count()
+    
+    daftar_kandidat = []
     for k in kandidat:
         n = db.query(Vote).filter_by(kandidat_id=k.id).count()
         ws.append([k.urutan, k.nama, n, round(n / total * 100, 2) if total else 0])
+        daftar_kandidat.append({'nama': k.nama, 'suara': n})
+
     chart = BarChart()
     chart.title = 'Hasil Voting'
     data_ref = Reference(ws, min_col=3, min_row=1, max_row=1 + len(kandidat))
@@ -571,6 +575,32 @@ def export_excel(request: Request, db: Session = Depends(get_db)):
     chart.width = 22
     ws.add_chart(chart, 'F2')
 
+       # Ambil kuota global yang diset admin
+    v_kuota = db.query(Voucher.kuota).order_by(Voucher.id.desc()).first()
+    kuota_tampil = v_kuota[0] if (v_kuota and v_kuota[0] > 0) else len(daftar_kandidat)
+
+    # Urutkan kandidat dari suara terbanyak ke terkecil & potong sesuai kuota
+    daftar_kandidat.sort(key=lambda x: x['suara'], reverse=True)
+    kandidat_terfilter = daftar_kandidat[:kuota_tampil]
+
+    # Hitung suara tidak sah / 0 yang akurat
+    jml_voucher_terpakai = db.query(Voucher).filter_by(status='TERPAKAI').count()
+    jml_pemilih_sah = db.query(Vote.session_id).distinct().count()
+    suara_kosong_db = db.query(Vote).filter((Vote.kandidat_id == None) | (Vote.kandidat_id == 0)).count()
+    suara_tidak_sah = max(0, jml_voucher_terpakai - jml_pemilih_sah) + suara_kosong_db
+    # Beri jarak 2 baris kosong di bawah tabel utama
+    ws.append([])
+    ws.append([])
+    
+    # Header tabel tambahan (Nama, Suara Terbanyak, dan Suara Tidak Sah/0 di sampingnya)
+    ws.append(['Peringkat', 'Nama Kandidat', 'Suara Terbanyak', 'Suara Tidak Sah / 0'])
+    
+    for idx, item in enumerate(kandidat_terfilter, start=1):
+        # Tampilkan angka suara tidak sah/0 pada baris pertama di samping tabel
+        kolom_tidak_sah = suara_tidak_sah if idx == 1 else ''
+        ws.append([idx, item['nama'], item['suara'], kolom_tidak_sah])
+
+    # --- 3. SHEET 2: LOG AKTIVITAS (TIDAK DIUBAH) ---
     ws2 = wb.create_sheet('Log Aktivitas')
     ws2.append(['Waktu', 'Jenis', 'Username Voucher', 'Admin', 'Keterangan', 'IP'])
     rows = db.query(ActivityLog).order_by(ActivityLog.id.asc()).all()
